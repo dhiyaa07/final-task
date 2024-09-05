@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: plum;
+        }
+        .pokemon-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .pokemon-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin: 10px;
+            padding: 12px 8px;
+            text-align: center;
+            width: 200px;
+            white-space: nowrap;
+            overflow: hidden; 
+            text-overflow: ellipsis;
+        }
+        .pokemon-card img {
+            width: 100px;
+            height: 100px;
+        }
+        .pokemon-card details {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>POKEMON</h1>
+    <div class="pokemon-container" id="pokemonContainer"></div>
+
+    <script>
+        const elPokemonContainer = document.getElementById('pokemonContainer');
+        fetch('https://pokeapi.co/api/v2/pokemon')
+            .then(res => res.json())
+            .then(data => {
+                data.results.forEach(pokemon => {
+                    const urlParts = pokemon.url.split('/'); // Memecah URL menjadi array
+                    const pokemonId = urlParts[urlParts.length - 2]; // Mengambil elemen kedua terakhir dari array
+                    const pokemonImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
+
+                    // Membuat elemen kartu Pokemon
+                    const pokemonCard = document.createElement('div');
+                    pokemonCard.className = 'pokemon-card';
+
+                    // Mengisi konten kartu Pokemon
+                    pokemonCard.innerHTML = `
+                    <img src="${pokemonImage}" alt="${pokemon.name}">
+                        <h3>${pokemon.name}</h3>
+                        <a href="${pokemon.url}" target="_blank">https://pokeapi.co/api/v2/pokemon</a>
+                    `;
+                     // Menambahkan kartu ke container
+                    pokemonContainer.appendChild(pokemonCard);
+                });
+            })
+    </script>
+</body>
+</html>
